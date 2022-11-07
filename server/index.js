@@ -9,7 +9,7 @@ app.use(express.json());
 const db = mysql.createConnection({
   user: "root",
   host: "127.0.0.1",
-  password: "",
+  password: "Password99@",
   database: "employee_system",
 });
 
@@ -31,6 +31,43 @@ app.post("/create", (req, res) => {
       }
     }
   );
+});
+
+app.get("/employees", (req, res) => {
+  db.query("SELECT * FROM EMPLOYEES", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+app.put("/update", (req, res) => {
+  const id = req.body.id;
+  const wage = req.body.wage;
+  db.query(
+    "UPDATE EMPLOYEES SET WAGE = ? WHERE ID = ?",
+    [wage, id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  db.query("DELETE FROM EMPLOYEES WHERE ID = ?", id, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(result);
+    }
+  });
 });
 
 app.listen(3001, () => {
